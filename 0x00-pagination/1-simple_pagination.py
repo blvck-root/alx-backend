@@ -47,10 +47,10 @@ class Server:
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Return the correct page.
         """
-        (assert isinstance(page, int) and page > 0,
-            "Page number must be a positive integer.")
-        (assert isinstance(page_size, int) and page_size > 0,
-            "Page size must be a positive integer.")
+        assert isinstance(page, int) and page > 0, \
+            "Page number must be a positive integer."
+        assert isinstance(page_size, int) and page_size > 0, \
+            "Page size must be a positive integer."
 
         dataset = self.dataset()
         data_length = len(dataset)
