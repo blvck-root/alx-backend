@@ -54,8 +54,10 @@ class Server:
         if index == 0:
             data = indexed_dataset.values()[:page_size]
         else:
-            data = [indexed_dataset[i] for i in range(index, next_index)
-                if i in indexed_dataset]
+            data = [
+                indexed_dataset[i] for i in range(index, next_index)
+                if i in indexed_dataset
+            ]
 
         return {
             "index": index,
