@@ -40,24 +40,26 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
-        dataset = self.indexed_dataset()
-        data_length = len(dataset)
-        assert 0 <= index < data_length
-        response = {}
-        data = []
-        response['index'] = index
-        for i in range(page_size):
-            while True:
-                curr = dataset.get(index)
-                index += 1
-                if curr is not None:
-                    break
-            data.append(curr)
+        """
+        Retrieves page with deletion-resilient hyper-pagination.
+        """
 
-        response['data'] = data
-        response['page_size'] = len(data)
-        if dataset.get(index):
-            response['next_index'] = index
+        indexed_dataset = self.indexed_dataset()
+
+        # Ensure index is withing valid range
+        assert 0 <= index < len(indexed_dataset)
+        next_index = index + page_size
+
+        # Handle edge case: requesting first page
+        if index == 0:
+            data = indexed_dataset.values()[:page_size]
         else:
-            response['next_index'] = None
-        return response
+            data = [indexed_dataset[i] for i in range(index, next_index)
+                if i in indexed_dataset]
+
+        return {
+            "index": index,
+            "next_index": next_index,
+            "page_size": page_size,
+            "data": data,
+         }
